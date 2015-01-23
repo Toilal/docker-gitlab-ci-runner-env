@@ -30,6 +30,8 @@ USER root
 RUN apt-get install -y git-core curl zlib1g-dev build-essential\
     libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3\
  	  libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties
+# Additional dependency for ruby 2.2.0
+RUN apt-get install -y libffi-dev
 USER gitlab_ci_runner
 
 # Install Ruby
@@ -50,8 +52,7 @@ RUN apt-get build-dep -y python2.7 python3.4
 USER gitlab_ci_runner
 
 # Install Python
-RUN . ~/.profile &&\
-    pyenv install 2.7.9 &&\
+RUN . ~/.profile && pyenv install 2.7.9
     pyenv install 3.3.6 &&\
     pyenv install 3.4.2 &&\
     pyenv install pypy-2.4.0 &&\
