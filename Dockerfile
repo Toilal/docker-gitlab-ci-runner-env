@@ -52,7 +52,7 @@ RUN apt-get build-dep -y python2.7 python3.4
 USER gitlab_ci_runner
 
 # Install Python
-RUN . ~/.profile && pyenv install 2.7.9
+RUN . ~/.profile && pyenv install 2.7.9 &&\
     pyenv install 3.3.6 &&\
     pyenv install 3.4.2 &&\
     pyenv install pypy-2.4.0 &&\
@@ -76,16 +76,13 @@ RUN apt-get install -y maven ant
 USER gitlab_ci_runner
 RUN git clone https://github.com/gcuisinier/jenv.git ~/.jenv &&\
     echo 'export PATH="$HOME/.jenv/bin:$PATH"' >> ~/.profile &&\
-    echo 'set PATH $HOME/.jenv/bin $PATH' >> ~/.profile
-
-# Workaround for https://github.com/gcuisinier/jenv/issues/77
-RUN mkdir ~/.jenv/versions
+    echo 'eval "$(jenv init -)"' >> ~/.profile
 
 # Register JDK into jenv
-RUN . ~/.profile &&\
+RUN bash -c ". ~/.profile &&\
     jenv add /usr/lib/jvm/java-6-oracle &&\
     jenv add /usr/lib/jvm/java-7-oracle &&\
-    jenv add /usr/lib/jvm/java-8-oracle
+    jenv add /usr/lib/jvm/java-8-oracle"
 
 # Go back to root
 USER root
